@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kisso – піца в Коломиї | доставка +380660209675</title>
+  <meta name="description" content="Піца, страви, десерти. Коломия, вул. Івана Миколайчука. Доставка та столики 1-30.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍕</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    :root{--peach:#FF7F50;--white:#fff;--radius:18px;--font:'Inter',sans-serif;}
+    *{margin:0;padding:0;box-sizing:border-box;font-family:var(--font)}
+    html{scroll-behavior:smooth}
+    body{background:var(--peach);color:#fff}
+
+    /* плаваючі іконки */
+    .floating-icons{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:-1}
+    .floating-icons i{position:absolute;bottom:-40px;font-size:1.5rem;opacity:.12;animation:float 20s linear infinite}
+    @keyframes float{to{transform:translateY(-120vh) rotate(360deg)}}
+
+    /* кнопка-оцінка */
+    .rate-block{text-align:center;margin:2rem 0}
+    .rate-block .btn{display:inline-flex;align-items:center;gap:.5rem;font-size:1.1rem}
+    .star-rating{font-size:1.5rem;color:#fff;margin-top:.5rem}
+    .star-rating i{cursor:pointer;transition:.2s}
+    .star-rating i.active,.star-rating i:hover{color:#ffd700}
+
+    header{position:sticky;top:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:.75rem 1rem;background:rgba(255,255,255,.15);backdrop-filter:blur(8px)}
+    .logo{font-size:1.5rem;font-weight:700;color:#fff}
+    .burger{width:30px;height:24px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer}
+    .burger span{width:100%;height:3px;background:#fff;border-radius:3px;transition:.3s}
+    nav{position:absolute;top:100%;left:0;right:0;background:rgba(255,255,255,.1);max-height:0;overflow:hidden;transition:max-height .4s ease;opacity:0;display:flex;flex-direction:column;padding:0 1rem}
+    nav.open{max-height:200px;opacity:1;padding:.5rem 1rem}
+    nav a{color:#fff;padding:.5rem 0;text-decoration:none;font-weight:600;transition:.3s}
+    nav a:hover{background:rgba(255,255,255,.1);border-radius:4px}
+    .hero{min-height:70vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem 1rem}
+    .hero h1{font-size:clamp(2rem,5vw,3.5rem);margin-bottom:.5rem}
+    .hero p{font-size:1.125rem;margin-bottom:1.5rem}
+    .btn{background:#fff;color:var(--peach);border:none;padding:.75rem 1.5rem;border-radius:50px;font-size:1rem;cursor:pointer;transition:.3s}
+    .btn:hover{transform:scale(1.05)}
+    .search-bar{width:90%;max-width:600px;margin:1rem auto;padding:.75rem 1rem;border:none;border-radius:50px;background:rgba(255,255,255,.2);color:#fff;outline:none;font-size:1rem}
+    .search-bar:focus{box-shadow:0 0 0 2px #fff}
+    .tabs{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;padding:1rem}
+    .tab{background:rgba(255,255,255,.2);color:#fff;padding:.5rem 1rem;border-radius:50px;cursor:pointer;font-weight:600;transition:.3s}
+    .tab.active{background:#fff;color:var(--peach);transform:scale(1.05)}
+    .menu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;padding:1rem}
+    .card{background:rgba(255,255,255,.15);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;transition:.3s}
+    .card:hover{transform:translateY(-4px)}
+    .card img{aspect-ratio:4/3;object-fit:cover;width:100%}
+.card-body{padding:1rem;flex:1;display:flex;flex-direction:column}
+    .card-title{font-size:1.125rem;margin-bottom:.25rem}
+    .card-price{font-weight:600;margin-bottom:.5rem}
+    .qty-row{display:flex;align-items:center;gap:.5rem;margin-top:auto}
+    .qty-btn{background:#fff;color:var(--peach);border:none;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:1.125rem;box-shadow:0 2px 6px rgba(0,0,0,.15);transition:.2s}
+    .qty-btn:hover{transform:scale(1.2)}
+    .cart-icon{position:relative;cursor:pointer}
+    .cart-count{position:absolute;top:-6px;right:-6px;background:#fff;color:var(--peach);border-radius:50%;width:18px;height:18px;font-size:.7rem;display:grid;place-items:center}
+    .cart-modal{position:fixed;inset:0;background:rgba(0,0,0,.3);backdrop-filter:blur(6px);display:none;place-items:center;z-index:2000}
+    .cart-modal.open{display:grid}
+    .cart-content{background:rgba(255,255,255,.9);color:#333;border-radius:var(--radius);width:100%;max-width:400px;max-height:80vh;overflow-y:auto;padding:1.5rem;display:flex;flex-direction:column;gap:1rem}
+    .cart-item{display:flex;justify-content:space-between;align-items:center;padding:.5rem 0;border-bottom:1px solid #eee}
+    .cart-total{font-weight:700;font-size:1.25rem;text-align:center}
+    .checkout-btn{background:#fff;color:var(--peach);border:none;padding:.75rem;border-radius:var(--radius);cursor:pointer;font-size:1rem}
+    .map{width:100%;height:250px;border:none;border-radius:var(--radius)}
+    footer{background:#fff;color:var(--peach);text-align:center;padding:1rem;font-size:.875rem}
+    .form-field {display: block; width: 100%; padding: 0.75rem; margin-bottom: 1rem; border: 1px solid #ddd; border-radius: var(--radius);}
+    select.form-field {appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1em;}
+    
+    @media(min-width:600px){
+      header{padding:1rem 2rem}
+      .burger{display:none}
+      nav{position:static;display:flex !important;flex-direction:row;gap:1rem;background:none;max-height:none;opacity:1}
+    }
+  </style>
+</head>
+
+<body>
+  <!-- плаваючі іконки -->
+  <div class="floating-icons" id="floatIcons"></div>
+
+  <header>
+    <div class="logo">Kisso</div>
+    <div class="burger" onclick="toggleNav()" aria-label="Меню">
+      <span></span><span></span><span></span>
+    </div>
+    <nav id="main-nav">
+      <a href="#menu">Меню</a>
+      <a href="#contacts">Контакти</a>
+    </nav>
+    <div class="cart-icon" onclick="toggleCart()" aria-label="Кошик">
+      <i class="fa-solid fa-basket-shopping" style="color:#fff;font-size:1.4rem"></i>
+      <span class="cart-count" id="count">0</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>Смак, що надихає</h1>
+      <p>Доставка або столики 1-30 • <a href="tel:+380660209675" style="color:#fff">+38 (066) 020-96-75</a></p>
+      <button class="btn" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})">Меню</button>
+    </section>
+
+    <input class="search-bar" id="searchInput" placeholder="🔎 Пошук по меню…" aria-label="Пошук">
+
+    <section id="menu">
+      <div class="tabs">
+        <button class="tab active" data-cat="pizza">Піца</button>
+        <button class="tab" data-cat="main">Страви</button>
+        <button class="tab" data-cat="drink">Напої</button>
+        <button class="tab" data-cat="alcohol">Алкоголь</button>
+        <button class="tab" data-cat="dessert">Десерти</button>
+        <button class="tab" data-cat="banquet">Банкети</button>
+        <button class="tab" data-cat="promo">Акції 🎁</button>
+      </div>
+      <div class="menu-grid" id="menuGrid"></div>
+<!-- блок оцінки -->
+      <div class="rate-block">
+        <button class="btn" onclick="openRate()">
+          <i class="fa-regular fa-face-smile"></i>Оцінити страви
+        </button>
+        <div class="star-rating" id="starRating" style="display:none;">
+          <i class="fa-regular fa-star" data-s="1"></i>
+          <i class="fa-regular fa-star" data-s="2"></i>
+          <i class="fa-regular fa-star" data-s="3"></i>
+          <i class="fa-regular fa-star" data-s="4"></i>
+          <i class="fa-regular fa-star" data-s="5"></i>
+        </div>
+      </div>
+    </section>
+
+    <section id="contacts" style="padding:2rem 1rem;text-align:center">
+      <h2>Контакти</h2>
+      <p><strong>📍 Коломия, вул. Івана Миколайчука, 78200</strong></p>
+      <p><strong>📞 <a href="tel:+380660209675" style="color:#fff;font-size:1.25rem">+38 (066) 020-96-75</a></strong></p>
+      <iframe class="map" loading="lazy"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2540.123456789!2d25.0379!3d48.5296!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0:0x0!2zNDjCsDMxJzQ2LjYiTiAyNcKwMDInMTYuNCJF!5e0!3m2!1suk!2sua!4v1620000000000!5m2!1suk!2sua"
+              allowfullscreen="" aria-label="Ми на мапі"></iframe>
+      <br>
+      <a class="btn" href="https://maps.google.com/?q=48.5296,25.0379" target="_blank" rel="noopener">Маршрут</a>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 Kisso • <a href="tel:+380660209675">+38 (066) 020-96-75</a></p>
+    <p>⏰ Пн–Нд: 10:00–22:00</p>
+    <div style="font-size:1.3rem;margin-top:.5rem">
+      <a href="https://instagram.com/kisso_kolomiya" target="_blank" style="color:var(--peach);margin-right:.5rem"><i class="fa-brands fa-instagram"></i></a>
+      <a href="https://t.me/kisso_bot" target="_blank" style="color:var(--peach)"><i class="fa-brands fa-telegram"></i></a>
+    </div>
+  </footer>
+
+  <!-- Cart Modal -->
+  <div class="cart-modal" id="cartModal" role="dialog" aria-modal="true" aria-labelledby="cartTitle">
+    <div class="cart-content">
+      <button onclick="toggleCart()" style="align-self:flex-end;background:none;border:none;font-size:1.5rem;cursor:pointer" aria-label="Закрити">✖</button>
+      <h2 id="cartTitle">Кошик</h2>
+      <div id="cartItems"></div>
+      <div class="cart-total">Разом: <span id="cartTotal">0</span> грн</div>
+      <form id="orderForm" onsubmit="handleOrder(event)">
+        <select name="deliveryType" class="form-field" required onchange="toggleFields(this)">
+          <option value="" disabled selected>Оберіть спосіб</option>
+          <option value="delivery">Доставка</option>
+          <option value="cafe">У кафе</option>
+        </select>
+        <input name="name" id="fieldName" class="form-field" placeholder="Ім'я" required>
+        <input name="phone" id="fieldPhone" class="form-field" type="tel" pattern="[0-9+]{10,}" placeholder="+380..." required>
+        <input name="address" id="fieldAddr" class="form-field" placeholder="Адреса доставки">
+        <div id="tableRow" style="display:none">
+          <label>Столик №</label>
+          <select name="table" id="selectTable" class="form-field"></select>
+        </div>
+        <button type="submit" class="checkout-btn">Оформити</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    /* ---------- DATA ---------- */
+    const menuData={
+      pizza:[
+        {name:'Маргарита',price:199,img:'https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?auto=format&fit=crop&w=600&q=60',promo:true},
+        {name:'Пеппероні',price:219,img:'https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=600&q=60'},
+        {name:'4 Сири',price:249,img:'https://images.unsplash.com/photo-1604382354936-07c3d9983bd3?auto=format&fit=crop&w=600&q=60'}
+      ],
+      main:[
+        {name:'Паста Карбонара',price:179,img:'https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=600&q=60',promo:true},
+{name:'Лазанья',price:209,img:'https://images.unsplash.com/photo-1619895092538-128341789043?auto=format&fit=crop&w=600&q=60'}
+      ],
+      drink:[
+        {name:'Лимонад',price:35,img:'https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=600&q=60',promo:true},
+        {name:'Кола',price:45,img:'https://images.unsplash.com/photo-1581636625402-29b2ca8b8e35?auto=format&fit=crop&w=600&q=60'}
+      ],
+      alcohol:[
+        {name:'Пиво 0.5',price:55,img:'https://images.unsplash.com/photo-1535958636474-b021ee887b13?auto=format&fit=crop&w=600&q=60'},
+        {name:'Вино 0.7',price:199,img:'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=600&q=60'}
+      ],
+      dessert:[
+        {name:'Тірамісу',price:99,img:'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=600&q=60',promo:true},
+        {name:'Чізкейк',price:109,img:'https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=600&q=60'}
+      ],
+      banquet:[
+        {name:'Банкет 6 осіб',price:699,img:'https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=600&q=60'},
+        {name:'Банкет 10 осіб',price:999,img:'https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=600&q=60'}
+      ],
+      promo:[]
+    };
+    /* збираємо акції з усіх категорій */
+    Object.values(menuData).forEach(arr=>{
+      arr.forEach(item=>{if(item.promo) menuData.promo.push(item)});
+    });
+
+    let cart=[], currentCat='pizza', searchStr='';
+
+    /* ---------- FUNCTIONS ---------- */
+    function render(){
+      const g=document.getElementById('menuGrid');
+      g.innerHTML='';
+      let list=menuData[currentCat]||[];
+      if(searchStr) list=list.filter(it=>it.name.toLowerCase().includes(searchStr));
+      list.forEach((it,i)=>{
+        const qty=getQty(it.name);
+        const c=document.createElement('article'); 
+        c.className='card'; 
+        c.style.animationDelay = i*100 + 'ms';
+        c.innerHTML=
+          '<img src="' + it.img + '" alt="' + it.name + '" loading="lazy">' +
+          '<div class="card-body">' +
+            '<h3 class="card-title">' + it.name + '</h3>' +
+            '<p class="card-price">' + it.price + ' грн ' + (it.promo?'<span style="color:#fff">акція</span>':'') + '</p>' +
+            '<div class="qty-row">' +
+              '<button class="qty-btn" onclick="changeQty(\'' + it.name + '\',' + it.price + ',-1)">-</button>' +
+              '<span class="qty-val">' + qty + '</span>' +
+              '<button class="qty-btn" onclick="changeQty(\'' + it.name + '\',' + it.price + ',1)">+</button>' +
+            '</div>' +
+          '</div>';
+        g.appendChild(c);
+      });
+    }
+    
+    function getQty(name){return cart.find(i=>i.name===name)?.qty||0}
+    
+    function changeQty(name,price,delta){
+      const item=cart.find(i=>i.name===name);
+      if(!item){if(delta>0) cart.push({name,price,qty:delta});}
+      else{item.qty=Math.max(0,item.qty+delta);if(item.qty===0) cart=cart.filter(i=>i.name!==name);}
+      localStorage.setItem('kisso-cart',JSON.stringify(cart));
+      document.getElementById('count').textContent=cart.reduce((s,i)=>s+i.qty,0);
+      render(); 
+      if(document.getElementById('cartModal').classList.contains('open')) updateCart();
+    }
+    
+    function toggleNav(){
+      const nav=document.getElementById('main-nav');
+      nav.classList.toggle('open');
+    }
+    
+    function toggleCart(){
+      const modal=document.getElementById('cartModal');
+      modal.classList.toggle('open');
+      if(modal.classList.contains('open')) updateCart();
+    }
+    
+    function updateCart(){
+      const list=document.getElementById('cartItems');
+      list.innerHTML='';
+      if(!cart.length){list.innerHTML='<p style="text-align:center">Кошик порожній</p>';}
+cart.forEach(it=>{
+        const div=document.createElement('div'); 
+        div.className='cart-item';
+        div.innerHTML=
+          '<span>' + it.name + '</span>' +
+          '<div class="qty-row">' +
+            '<button class="qty-btn" onclick="changeQty(\'' + it.name + '\',' + it.price + ',-1)">-</button>' +
+            '<span>' + it.qty + '</span>' +
+            '<button class="qty-btn" onclick="changeQty(\'' + it.name + '\',' + it.price + ',1)">+</button>' +
+          '</div>' +
+          '<span>' + (it.price*it.qty) + ' грн</span>';
+        list.appendChild(div);
+      });
+      document.getElementById('cartTotal').textContent=cart.reduce((s,i)=>s+i.price*i.qty,0);
+    }
+    
+    function toggleFields(sel){
+      const isCafe=sel.value==='cafe';
+      const nameField = document.getElementById('fieldName');
+      const phoneField = document.getElementById('fieldPhone');
+      const addrField = document.getElementById('fieldAddr');
+      const tableRow = document.getElementById('tableRow');
+      
+      if(isCafe){
+        addrField.style.display = 'none';
+        addrField.required = false;
+        tableRow.style.display = 'block';
+        document.getElementById('selectTable').required = true;
+      } else {
+        addrField.style.display = 'block';
+        addrField.required = true;
+        tableRow.style.display = 'none';
+        document.getElementById('selectTable').required = false;
+      }
+      
+      // Створюємо опції для столиків, якщо ще не створені
+      if(isCafe && !document.getElementById('selectTable').children.length){
+        const s=document.getElementById('selectTable');
+        for(let i=1;i<=30;i++){
+          const o=document.createElement('option');
+          o.value=i;
+          o.textContent=i;
+          s.appendChild(o);
+        }
+      }
+    }
+
+    /* Telegram-відправка */
+    async function sendToTelegram(orderNo, total, formData){
+      const token   = '8383546914:AAHDOJNxVqYfw3njRE6rczn5THyaX-G0w-M';  // <-- замініть
+      const chat_id = '2026196111';    // <-- замініть
+      
+      // Формуємо текст повідомлення
+      let text = '🍕 Нове замовлення №' + orderNo + '\n';
+      text += '💰 ' + total + ' грн\n';
+      text += '👤 ' + formData.get('name') + ' | ' + formData.get('phone') + '\n';
+      
+      if(formData.get('deliveryType')==='cafe'){
+        text += '🍽️ У кафе, стіл ' + formData.get('table');
+      } else {
+        text += '🚗 Доставка: ' + formData.get('address');
+      }
+      
+      text += '\n\nЗамовлення:\n';
+      cart.forEach(item => {
+        text += '• ' + item.name + ' x' + item.qty + ' - ' + (item.price * item.qty) + ' грн\n';
+      });
+      
+      try {
+        const response = await fetch('https://api.telegram.org/bot' + token + '/sendMessage', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({chat_id, text})
+        });
+        
+        if(!response.ok) {
+          throw new Error('Помилка відправки в Telegram');
+        }
+        
+        return true;
+      } catch (error) {
+        console.error('Помилка:', error);
+        return false;
+      }
+    }
+    
+    async function handleOrder(e){
+      e.preventDefault();
+      if(!cart.length){alert('Кошик порожній');return;}
+      
+      const formData = new FormData(e.target);
+      const orderNo=Math.random().toString(36).substr(2,6).toUpperCase();
+      const total = cart.reduce((s,i)=>s+i.price*i.qty,0);
+      
+      // Валідація форми
+      if(formData.get('deliveryType') === 'delivery' && !formData.get('address')) {
+        alert('Будь ласка, вкажіть адресу доставки');
+        return;
+      }
+      
+      const success = await sendToTelegram(orderNo, total, formData);
+      
+      if(success) {
+        alert('✅ Замовлення №' + orderNo + ' прийнято!\n📞 +38 (066) 020-96-75 зателефонуємо найближчим часом.');
+cart=[];
+        localStorage.removeItem('kisso-cart');
+        document.getElementById('count').textContent=0;
+        document.getElementById('orderForm').reset();
+        render();
+        toggleCart();
+      } else {
+        alert('❌ Сталася помилка при відправці замовлення. Будь ласка, спробуйте ще раз або зателефонуйте нам.');
+      }
+    }
+
+    /* плаваючі іконки */
+    const icons=['fa-pizza-slice','fa-burger','fa-glass-cheers','fa-cookie-bite','fa-coffee'];
+    const fi=document.getElementById('floatIcons');
+    for(let i=0;i<25;i++){
+const el=document.createElement('i');
+      el.className='fa-solid '+icons[i%icons.length];
+      el.style.left=Math.random()*100+'%';
+      el.style.animationDelay=Math.random()*20+'s';
+      el.style.animationDuration=(18+Math.random()*8)+'s';
+      fi.appendChild(el);
+    }
+
+    /* зірковий рейтинг */
+    function openRate(){
+      document.getElementById('starRating').style.display='block';
+    }
+    
+    document.querySelectorAll('#starRating i').forEach(star=>{
+      star.addEventListener('click',()=>{
+        const s=+star.dataset.s;
+        document.querySelectorAll('#starRating i').forEach((x,i)=>{
+          x.className = i < s ? 'fa-solid fa-star active' : 'fa-regular fa-star';
+        });
+        setTimeout(()=>alert('Дякуємо за вашу оцінку!'),150);
+      });
+    });
+
+    /* init */
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('searchInput').addEventListener('input',e=>{
+        searchStr=e.target.value.toLowerCase();
+        render();
+      });
+      
+      document.querySelectorAll('.tab').forEach(btn=>{
+        btn.addEventListener('click',()=>{
+          document.querySelector('.tab.active').classList.remove('active');
+          btn.classList.add('active');
+          currentCat=btn.dataset.cat;
+          render();
+        });
+      });
+      
+      document.querySelectorAll('#main-nav a').forEach(a=>{
+        a.addEventListener('click', toggleNav);
+      });
+      
+      const saved=JSON.parse(localStorage.getItem('kisso-cart')||'[]');
+      cart=saved;
+      document.getElementById('count').textContent=cart.reduce((s,i)=>s+i.qty,0);
+      render();
+    });
+  </script>
+</body>
+</html>
