@@ -74,6 +74,11 @@
       .burger{display:none}
       nav{position:static;display:flex !important;flex-direction:row;gap:1rem;background:none;max-height:none;opacity:1}
     }
+    .onepunchman {
+      display: flex;
+      justify-content: center;
+
+    }
   </style>
 </head>
 
@@ -102,8 +107,10 @@
       <p>Доставка або столики 1-30 • <a href="tel:+380660209675" style="color:#fff">+38 (066) 020-96-75</a></p>
       <button class="btn" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})">Меню</button>
     </section>
-
-    <input class="search-bar" id="searchInput" placeholder="🔎 Пошук по меню…" aria-label="Пошук">
+    <div class = "onepunchman">
+      <input class="search-bar" id="searchInput" placeholder="🔎 Пошук по меню…" aria-label="Пошук">
+    </div>
+    
 
     <section id="menu">
       <div class="tabs">
@@ -190,8 +197,9 @@
 {name:'Лазанья',price:209,img:'https://images.unsplash.com/photo-1619895092538-128341789043?auto=format&fit=crop&w=600&q=60'}
       ],
       drink:[
-        {name:'Лимонад',price:35,img:'https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=600&q=60',promo:true},
-        {name:'Кола',price:45,img:'https://images.unsplash.com/photo-1581636625402-29b2ca8b8e35?auto=format&fit=crop&w=600&q=60'}
+        {name:'Лимонад',price:35,img:'https://cdn.metro-online.com/-/media/Project/MCW/UA_Metro/Blog/2021/07_2021/Klasychnyy-lymonad/Metro_shop_45945933?auto=format&fit=crop&w=600&q=60',promo:true},
+        {name:'Кола',price:45,img:'https://images.unsplash.com/photo-1581636625402-29b2ca8b8e35?auto=format&fit=crop&w=600&q=60'},
+        {name:'пепсі',price:45,img:'https://images.unsplash.com/photo-1581636625402-29b2ca8b8e35?auto=format&fit=crop&w=600&q=60'}
       ],
       alcohol:[
         {name:'Пиво 0.5',price:55,img:'https://images.unsplash.com/photo-1535958636474-b021ee887b13?auto=format&fit=crop&w=600&q=60'},
